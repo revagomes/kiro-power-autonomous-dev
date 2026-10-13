@@ -6,7 +6,32 @@ inclusion: always
 
 ## After Task Completion
 
-Once a subagent signals completion, the orchestrator pushes the branch and creates a Pull/Merge Request for human review. Agents never merge their own work.
+Once a subagent signals completion, the orchestrator **first runs the mandatory
+adversarial review gate below**, then pushes the branch and creates a Pull/Merge
+Request for human review. Agents never merge their own work.
+
+## Pre-PR/MR Adversarial Review (mandatory gate)
+
+Before the branch is pushed and a PR/MR is created, the orchestrator **must** dispatch
+the `adversarial-reviewer` agent (see `agents/adversarial-reviewer.md`) against the
+task branch diff. This gate is not optional and cannot be skipped by the subagent that
+produced the work — review is always performed by a separate agent.
+
+1. Dispatch `adversarial-reviewer` with the task ID, acceptance criteria, worktree
+   path, branch name, and the branch diff versus the base branch.
+2. The reviewer only finds problems; it never approves. The orchestrator treats
+   **zero CRITICAL findings** as the signal the gate is cleared.
+3. **If there are CRITICAL findings:** do not push, do not create the PR/MR. Set the
+   task `status: review-blocked`, record a short summary of the CRITICAL findings
+   (not the raw diff), and either dispatch a fix cycle to the same worktree or leave
+   it for the human. Record the reviewed HEAD SHA; re-run the gate only after the
+   branch HEAD SHA changes (i.e. the diff materially changed).
+4. **If there are only MINOR findings:** proceed, and fold a one-line acknowledgement
+   of each MINOR finding into the PR/MR description's **Notes** section.
+5. **If there are no findings:** proceed to push and PR/MR creation.
+
+Record only the finding summaries and the gate outcome in `.worktrees/orchestrator.log`
+— never the raw diff or any secret surfaced during review.
 
 ## GitHub — Pull Request
 

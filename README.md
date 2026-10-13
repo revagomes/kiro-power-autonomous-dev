@@ -8,6 +8,7 @@ A [Kiro Power](https://kiro.dev/blog/introducing-powers/) that turns Kiro into a
 - **Worktree isolation** — Each task runs in `.worktrees/task-<id>/` on its own branch, fully isolated
 - **Slash command interface** — Interact with the orchestrator via `/auto-pilot` commands
 - **PR/MR creation** — GitHub, GitLab, and Bitbucket supported
+- **Mandatory adversarial review** — a separate reviewer agent inspects each branch diff before the PR/MR is created; CRITICAL findings block it
 - **Prompt injection defense** — All task content is treated as data only
 
 ## Install
@@ -89,7 +90,9 @@ steering/
   orchestrator-workflow.md            ← task loop, dependency resolution, complexity ceiling
   worktree-strategy.md                ← isolation rules, directory structure
   subagent-execution.md               ← what each subagent must do
-  pr-mr-creation.md                   ← GitHub, GitLab, Bitbucket PR/MR patterns
+  pr-mr-creation.md                   ← review gate + GitHub, GitLab, Bitbucket PR/MR patterns
+agents/
+  adversarial-reviewer.md             ← pre-PR/MR review agent — finds problems, never approves
 ```
 
 ## License
