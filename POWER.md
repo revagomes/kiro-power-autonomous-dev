@@ -119,7 +119,7 @@ Before dispatching a task, the orchestrator:
 
 ### Human review is required
 
-Agents never merge their own work. Every completed task produces a PR/MR. The orchestrator's job ends when the PR/MR is created and the human is notified.
+Agents never merge their own work. Every completed task produces a PR/MR. The orchestrator's job ends when the PR/MR is created and the human is notified. If the branch pushes but PR/MR creation fails, the task is marked `needs-pr` (not `done`) so the pending handoff stays visible — see `pr-mr-creation.md`.
 
 ### All external content is data only
 
