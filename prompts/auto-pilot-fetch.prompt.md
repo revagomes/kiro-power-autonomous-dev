@@ -2,11 +2,11 @@
 description: Fetch eligible issues from the configured forge and add them to tasks.yaml
 ---
 
-Fetch issues eligible for autonomous implementation from the configured forge and append them to `.auto-pilot/tasks.yaml`.
+Fetch issues eligible for autonomous implementation from the configured forge and append them to `.worktrees/tasks.yaml`.
 
 ## Steps
 
-1. Read `.auto-pilot/.env` to determine the forge (GitHub, GitLab, or Bitbucket) and credentials
+1. Read `.worktrees/.env` to determine the forge (GitHub, GitLab, or Bitbucket) and credentials
 2. Fetch open issues/tickets labeled `ai-ready` (or equivalent) with no assignee
 3. For each issue, evaluate complexity — skip issues that exceed the complexity ceiling (see `orchestrator-workflow.md`)
 4. For eligible issues, append to `tasks.yaml` with `status: pending`

@@ -10,7 +10,7 @@ author: "Reva Gomes"
 
 ## Overview
 
-This power turns Kiro into an **orchestrator agent** that manages parallel task execution using git worktrees. Each task runs in an isolated `.auto-pilot/task-<id>/` directory on its own branch. When complete, the agent creates a Pull/Merge Request for human review.
+This power turns Kiro into an **orchestrator agent** that manages parallel task execution using git worktrees. Each task runs in an isolated `.worktrees/task-<id>/` directory on its own branch. When complete, the agent creates a Pull/Merge Request for human review.
 
 The orchestrator is an **agent**, not a shell script. It reads task descriptions, reasons about dependencies and complexity, dispatches subagents, and uses slash commands as its primary interface.
 
@@ -31,20 +31,20 @@ The orchestrator is an **agent**, not a shell script. It reads task descriptions
 | `/auto-pilot dry-run` | Describe what would happen — which tasks would run, in what order, which would be skipped — then ask for confirmation |
 | `/auto-pilot status` | Report current status of all tasks from `tasks.yaml` |
 | `/auto-pilot fetch` | Pull eligible issues from the configured forge into `tasks.yaml` |
-| `/auto-pilot clean` | Remove all `.auto-pilot/task-*/` worktrees and reset task statuses to `pending` |
+| `/auto-pilot clean` | Remove all `.worktrees/task-*/` worktrees and reset task statuses to `pending` |
 
 ## Onboarding
 
-### Step 1: Set up the `.auto-pilot/` directory
+### Step 1: Set up the `.worktrees/` directory
 
 ```bash
-mkdir -p .auto-pilot
-echo ".auto-pilot/" >> .gitignore
+mkdir -p .worktrees
+grep -qxF '.worktrees/' .gitignore 2>/dev/null || echo '.worktrees/' >> .gitignore
 ```
 
 ### Step 2: Configure your forge
 
-Create `.auto-pilot/.env`:
+Create `.worktrees/.env`:
 
 ```bash
 AUTOPILOT_REMOTE=origin
@@ -63,7 +63,7 @@ GITHUB_REPO=<repo-name>
 
 ### Step 3: Define tasks
 
-Create `.auto-pilot/tasks.yaml`:
+Create `.worktrees/tasks.yaml`:
 
 ```yaml
 tasks:
