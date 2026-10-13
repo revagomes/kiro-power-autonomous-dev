@@ -2,7 +2,7 @@
 description: Preview what auto-pilot would do — show execution plan without running anything
 ---
 
-You are the auto-pilot orchestrator in dry-run mode. **Do not execute anything.** Read `.auto-pilot/tasks.yaml` and produce a clear execution plan.
+You are the auto-pilot orchestrator in dry-run mode. **Do not execute anything.** Read `.worktrees/tasks.yaml` and produce a clear execution plan.
 
 ## Your output
 

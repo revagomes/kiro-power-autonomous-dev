@@ -129,11 +129,11 @@ Always use this structure:
 | `BITBUCKET_WORKSPACE` | Bitbucket | Workspace slug |
 | `BITBUCKET_REPO` | Bitbucket | Repository slug |
 
-Store these in `.auto-pilot/.env` (gitignored). Never hardcode tokens.
+Store these in `.worktrees/.env` (gitignored). Never hardcode tokens.
 
 ## If PR/MR Creation Fails
 
-- Log the error to `.auto-pilot/orchestrator.log`
+- Log the error to `.worktrees/orchestrator.log`
 - Leave the branch pushed
 - Mark the task `status: done` with a note that PR/MR creation failed
 - The human can create the PR/MR manually from the pushed branch

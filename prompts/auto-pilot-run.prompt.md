@@ -2,11 +2,11 @@
 description: Run all pending tasks — read tasks.yaml, reason about dependencies, dispatch subagents
 ---
 
-You are the auto-pilot orchestrator. Run all pending tasks from `.auto-pilot/tasks.yaml`.
+You are the auto-pilot orchestrator. Run all pending tasks from `.worktrees/tasks.yaml`.
 
 ## Your sequence
 
-1. **Read** `.auto-pilot/tasks.yaml` — identify all tasks with `status: pending`
+1. **Read** `.worktrees/tasks.yaml` — identify all tasks with `status: pending`
 2. **Reason** about each task:
    - Are acceptance criteria clear? If not, stop and ask the human before proceeding
    - Does it have unmet dependencies (`depends_on` tasks not yet `done`)? Skip for now
@@ -14,7 +14,7 @@ You are the auto-pilot orchestrator. Run all pending tasks from `.auto-pilot/tas
 3. **Order** tasks: independent tasks can run in parallel; dependent tasks run after their dependencies
 4. **Dispatch** each eligible task to a subagent with:
    - The task description and acceptance criteria
-   - The assigned worktree path: `.auto-pilot/<task-id>/`
+   - The assigned worktree path: `.worktrees/<task-id>/`
    - The assigned branch name from `tasks.yaml`
    - Instructions to follow `subagent-execution.md`
 5. **Monitor** each subagent — update `status: in-progress` when dispatched

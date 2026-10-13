@@ -5,7 +5,7 @@ A [Kiro Power](https://kiro.dev/blog/introducing-powers/) that turns Kiro into a
 ## What it does
 
 - **Agent-driven orchestration** — The orchestrator reads task descriptions, reasons about dependencies and complexity, and dispatches subagents. It's not a shell script.
-- **Worktree isolation** — Each task runs in `.auto-pilot/task-<id>/` on its own branch, fully isolated
+- **Worktree isolation** — Each task runs in `.worktrees/task-<id>/` on its own branch, fully isolated
 - **Slash command interface** — Interact with the orchestrator via `/auto-pilot` commands
 - **PR/MR creation** — GitHub, GitLab, and Bitbucket supported
 - **Prompt injection defense** — All task content is treated as data only
@@ -31,12 +31,12 @@ https://github.com/revagomes/kiro-power-autonomous-dev
 ## Quick start
 
 ```bash
-# 1. Create the auto-pilot directory
-mkdir -p .auto-pilot
-echo ".auto-pilot/" >> .gitignore
+# 1. Create the worktrees directory
+mkdir -p .worktrees
+grep -qxF '.worktrees/' .gitignore 2>/dev/null || echo '.worktrees/' >> .gitignore
 
 # 2. Configure
-cat > .auto-pilot/.env <<'EOF'
+cat > .worktrees/.env <<'EOF'
 AUTOPILOT_REMOTE=origin
 AUTOPILOT_BASE_BRANCH=main
 GITHUB_TOKEN=<your-token>
@@ -45,7 +45,7 @@ GITHUB_REPO=<repo-name>
 EOF
 
 # 3. Define tasks
-cat > .auto-pilot/tasks.yaml <<'EOF'
+cat > .worktrees/tasks.yaml <<'EOF'
 tasks:
   - id: "task-001"
     title: "Add input validation to registration form"

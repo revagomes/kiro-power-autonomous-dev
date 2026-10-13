@@ -11,7 +11,7 @@ The orchestrator is an agent, not a shell script. It reads task descriptions, re
 ## Task File Format
 
 ```yaml
-# .auto-pilot/tasks.yaml
+# .worktrees/tasks.yaml
 tasks:
   - id: "task-001"
     title: "Add input validation to registration form"
@@ -56,22 +56,22 @@ If a task exceeds the ceiling, mark it `status: failed` with reason "Complexity 
 ### 4. Create worktree and dispatch subagent
 
 ```bash
-source .auto-pilot/.env
-git worktree add .auto-pilot/task-001 -b feature/task-001-registration-validation $AUTOPILOT_BASE_BRANCH
+source .worktrees/.env
+git worktree add .worktrees/task-001 -b feature/task-001-registration-validation $AUTOPILOT_BASE_BRANCH
 ```
 
 Update `status: in-progress`. Dispatch a subagent with:
 - Task description and acceptance criteria
-- Worktree path: `.auto-pilot/task-001/`
+- Worktree path: `.worktrees/task-001/`
 - Branch name: `feature/task-001-registration-validation`
 - Instructions to follow `subagent-execution.md`
 
 ### 5. On subagent completion
 - Run quality checks on the worktree
-- Push the branch: `git -C .auto-pilot/task-001 push $AUTOPILOT_REMOTE feature/task-001-registration-validation`
+- Push the branch: `git -C .worktrees/task-001 push $AUTOPILOT_REMOTE feature/task-001-registration-validation`
 - Create PR/MR (see `pr-mr-creation.md`)
 - Update `status: done`
-- Remove worktree: `git worktree remove .auto-pilot/task-001`
+- Remove worktree: `git worktree remove .worktrees/task-001`
 
 ### 6. On failure
 - Update `status: failed`
@@ -81,7 +81,7 @@ Update `status: in-progress`. Dispatch a subagent with:
 ## Git Configuration Auto-Detection
 
 ```bash
-# .auto-pilot/.env (override auto-detection)
+# .worktrees/.env (override auto-detection)
 AUTOPILOT_REMOTE=origin
 AUTOPILOT_BASE_BRANCH=main
 ```
@@ -92,7 +92,7 @@ Auto-detection priority:
 
 ## Logging
 
-Append all orchestrator actions to `.auto-pilot/orchestrator.log`:
+Append all orchestrator actions to `.worktrees/orchestrator.log`:
 
 ```
 [2026-04-15 10:00:01] INFO  Starting run — 2 pending tasks
