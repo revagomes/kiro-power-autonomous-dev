@@ -35,12 +35,25 @@ The orchestrator is an **agent**, not a shell script. It reads task descriptions
 
 ## Onboarding
 
+> **Upgrading from `.auto-pilot/`?** This power previously used `.auto-pilot/` as the worktree directory. If you have an existing install, do this **before** anything else so your tokens are never tracked:
+> 1. Remove any in-flight worktrees: `git worktree list` then `git worktree remove .auto-pilot/<task-id>` for each.
+> 2. Rename the directory: `mv .auto-pilot .worktrees` (this moves your `.env` and `tasks.yaml` with it).
+> 3. Update `.gitignore`: replace the `.auto-pilot/` line with `.worktrees/` (Step 1 below adds it if missing).
+> 4. Re-create any removed worktrees with the new paths on your next `/auto-pilot run`.
+>
+> The `/auto-pilot` slash command and the `AUTOPILOT_*` env vars are unchanged — only the on-disk directory moved.
+
 ### Step 1: Set up the `.worktrees/` directory
 
+Ignore the directory **first** — it will hold `.env` with your forge tokens, so it must never be tracked by git:
+
 ```bash
-mkdir -p .worktrees
+# Add the ignore rule before creating anything inside the directory
 grep -qxF '.worktrees/' .gitignore 2>/dev/null || echo '.worktrees/' >> .gitignore
+mkdir -p .worktrees
 ```
+
+If your `.gitignore` already ignores the directory under a different form (e.g. `.worktrees`, `/.worktrees/`), the line above is skipped only when it matches exactly — otherwise verify the directory is ignored with `git check-ignore .worktrees/.env` before storing tokens.
 
 ### Step 2: Configure your forge
 

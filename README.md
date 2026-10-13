@@ -30,10 +30,12 @@ https://github.com/revagomes/kiro-power-autonomous-dev
 
 ## Quick start
 
+> Upgrading from `.auto-pilot/`? Remove in-flight worktrees, run `mv .auto-pilot .worktrees`, and replace the `.auto-pilot/` line in `.gitignore` with `.worktrees/`. The `/auto-pilot` command and `AUTOPILOT_*` vars are unchanged — only the directory moved.
+
 ```bash
-# 1. Create the worktrees directory
-mkdir -p .worktrees
+# 1. Ignore the directory FIRST (it will hold .env with your tokens), then create it
 grep -qxF '.worktrees/' .gitignore 2>/dev/null || echo '.worktrees/' >> .gitignore
+mkdir -p .worktrees
 
 # 2. Configure
 cat > .worktrees/.env <<'EOF'
