@@ -23,7 +23,7 @@ tasks:
       - Unit tests must cover valid and invalid inputs
     branch: "feature/task-001-registration-validation"
     depends_on: []
-    status: pending   # pending | in-progress | done | failed
+    status: pending   # pending | in-progress | done | needs-pr | failed
 
   - id: "task-002"
     title: "Add unit tests for AuthService"
@@ -70,7 +70,8 @@ Update `status: in-progress`. Dispatch a subagent with:
 - Run quality checks on the worktree
 - Push the branch: `git -C .worktrees/task-001 push $AUTOPILOT_REMOTE feature/task-001-registration-validation`
 - Create PR/MR (see `pr-mr-creation.md`)
-- Update `status: done`
+- If the PR/MR was created: update `status: done`
+- If the push succeeded but PR/MR creation failed: update `status: needs-pr` (see `pr-mr-creation.md`) — the branch is pushed and the human must open the PR/MR manually
 - Remove worktree: `git worktree remove .worktrees/task-001`
 
 ### 6. On failure

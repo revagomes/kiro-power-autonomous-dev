@@ -133,7 +133,7 @@ Store these in `.worktrees/.env` (gitignored). Never hardcode tokens.
 
 ## If PR/MR Creation Fails
 
-- Log the error to `.worktrees/orchestrator.log`
-- Leave the branch pushed
-- Mark the task `status: done` with a note that PR/MR creation failed
-- The human can create the PR/MR manually from the pushed branch
+- Log a one-line error to `.worktrees/orchestrator.log` — record the **HTTP status and a short message only**. Never write the raw request body, raw response body, or any header (they can echo back tokens, cookies, or the submitted payload).
+- Leave the branch pushed (never delete the subagent's work).
+- Mark the task `status: needs-pr` (not `done`) with a short `note:` describing the failure. The work is finished but the handoff is not — `done` is reserved for tasks whose PR/MR was actually created.
+- `/auto-pilot status` surfaces `needs-pr` tasks so the human knows to open the PR/MR manually from the pushed branch.
