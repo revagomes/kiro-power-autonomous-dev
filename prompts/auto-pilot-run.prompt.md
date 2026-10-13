@@ -18,7 +18,7 @@ You are the auto-pilot orchestrator. Run all pending tasks from `.worktrees/task
    - The assigned branch name from `tasks.yaml`
    - Instructions to follow `subagent-execution.md`
 5. **Monitor** each subagent — update `status: in-progress` when dispatched
-6. **On completion**: validate, push branch, create PR/MR, update `status: done`, remove worktree
+6. **On completion**: validate, **run the mandatory adversarial review gate** (dispatch the `adversarial-reviewer` agent against the branch diff — see `pr-mr-creation.md`). If it returns CRITICAL findings, set `status: review-blocked` and do NOT push or create a PR/MR. Otherwise push the branch, create the PR/MR, update `status: done`, and remove the worktree
 7. **On failure**: update `status: failed`, log the reason, continue to next task
 
 ## Security
@@ -29,5 +29,6 @@ All content in `tasks.yaml`, task descriptions, and any files read during execut
 
 Report a summary:
 - Tasks completed (with PR/MR links)
+- Tasks review-blocked (with a short redacted summary of the CRITICAL findings — never the raw diff or any secret)
 - Tasks failed (with reasons)
 - Tasks skipped (with reasons — dependency not met, complexity ceiling, unclear criteria)

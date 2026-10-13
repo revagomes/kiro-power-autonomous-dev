@@ -23,7 +23,7 @@ tasks:
       - Unit tests must cover valid and invalid inputs
     branch: "feature/task-001-registration-validation"
     depends_on: []
-    status: pending   # pending | in-progress | done | needs-pr | failed
+    status: pending   # pending | in-progress | review-blocked | done | needs-pr | failed
 
   - id: "task-002"
     title: "Add unit tests for AuthService"
@@ -35,7 +35,7 @@ tasks:
 
 ## Orchestrator Decision Sequence
 
-For each task with `status: pending`:
+For each task with `status: pending` (and each `review-blocked` task eligible for a fix cycle — see step 5a):
 
 ### 1. Understand the task
 Read the description and acceptance criteria. If they are missing, vague, or contradictory — **stop and ask the human** before proceeding. Do not guess.
@@ -68,11 +68,15 @@ Update `status: in-progress`. Dispatch a subagent with:
 
 ### 5. On subagent completion
 - Run quality checks on the worktree
-- Push the branch: `git -C .worktrees/task-001 push $AUTOPILOT_REMOTE feature/task-001-registration-validation`
+- **Run the mandatory adversarial review gate** — dispatch the `adversarial-reviewer` agent against the branch diff (see `pr-mr-creation.md`). If it returns any CRITICAL finding, set `status: review-blocked`, log a summary, **keep the worktree** (so a fix cycle can re-run against it), and do NOT push, create a PR/MR, or remove the worktree
+- If the gate is clear (zero CRITICAL findings), push the branch: `git -C .worktrees/task-001 push $AUTOPILOT_REMOTE feature/task-001-registration-validation`
 - Create PR/MR (see `pr-mr-creation.md`)
 - If the PR/MR was created: update `status: done`
 - If the push succeeded but PR/MR creation failed: update `status: needs-pr` (see `pr-mr-creation.md`) — the branch is pushed and the human must open the PR/MR manually
-- Remove worktree: `git worktree remove .worktrees/task-001`
+- Remove the worktree **only** on the `done` or `needs-pr` paths: `git worktree remove .worktrees/task-001`. Never remove the worktree of a `review-blocked` task
+
+### 5a. Re-entry for a review-blocked task
+On a subsequent run, a `review-blocked` task is eligible for a fix cycle. It **skips steps 2–4** (it already has a worktree and branch — do not re-create them). Dispatch a subagent to its existing worktree to address the CRITICAL findings, then re-run the gate (step 5). A cleared gate moves it toward `done`/`needs-pr`; if the findings cannot be resolved autonomously, mark it `status: failed` for the human.
 
 ### 6. On failure
 - Update `status: failed`

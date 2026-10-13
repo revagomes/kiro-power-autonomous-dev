@@ -8,6 +8,8 @@ For each task show: ID, title, status, branch, and any notes (e.g., PR/MR link i
 
 Call out `needs-pr` tasks prominently — these have a pushed branch but no PR/MR yet, and need a human to open the PR/MR manually.
 
+Call out `review-blocked` tasks prominently — the adversarial review gate found CRITICAL issues; these were NOT pushed and need a fix cycle or human attention before they can produce a PR/MR. Show a short redacted summary of the findings only — never the raw diff or any secret a finding may reference.
+
 Also report:
 - Active worktrees: run `git worktree list` and show any `.worktrees/` entries
 - Any tasks marked `in-progress` with no active worktree (possible stale state)
