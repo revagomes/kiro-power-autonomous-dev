@@ -31,7 +31,7 @@ All unit tests pass. Run: \`vendor/bin/phpunit tests/Form/RegistrationFormTest.p
 ### Using GitHub REST API
 
 ```bash
-curl --silent --fail \
+curl --silent --show-error --fail-with-body \
   --header "Authorization: Bearer $GITHUB_TOKEN" \
   --header "Content-Type: application/json" \
   --data '{
@@ -67,7 +67,7 @@ All tests pass." \
 ### Using GitLab REST API
 
 ```bash
-curl --silent --fail \
+curl --silent --show-error --fail-with-body \
   --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
   --header "Content-Type: application/json" \
   --data '{
@@ -83,7 +83,7 @@ curl --silent --fail \
 ## Bitbucket — Pull Request
 
 ```bash
-curl --silent --fail \
+curl --silent --show-error --fail-with-body \
   --user "$BITBUCKET_USER:$BITBUCKET_APP_PASSWORD" \
   --header "Content-Type: application/json" \
   --data '{
